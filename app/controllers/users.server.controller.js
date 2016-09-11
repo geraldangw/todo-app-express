@@ -1,5 +1,8 @@
 var User = require('mongoose').model('User');
 
+var jwt = require('jsonwebtoken');
+var jwt_secret = 'onetwothreefourfiveonesixsevenseven';
+
 
 module.exports = {
   index: function(req, res, next) {
@@ -28,6 +31,39 @@ module.exports = {
         res.json(user);
       }
     });
+  },
+  login: function(req, res) {
+    var input_user = req.body;
+
+    User.findOne({ email: input_user.email }, function (err, db_user) {
+      if(err) res.send(err);
+
+      if(db_user) {
+        db_user.auth( input_user.password, function(err, is_match_password) {
+
+          if(err) return res.status(500).send(err);
+
+          if(is_match_password) {
+            var payload = {
+              id: db_user.id,
+              email: db_user.email
+            };
+            var expiryObj = {
+              expiresIn: '96h'
+            };
+            var jwt_token = jwt.sign(payload, jwt_secret, expiryObj);
+
+
+            return res.status(200).send(jwt_token);
+          } else {
+            return res.status(401).send({ message: 'login failed' });
+          }
+        });
+      } else {
+        return res.status(401).send({ message: 'user not found in database' });
+      }
+    });
+
   },
   destroy: function(req, res, next) {
     req.user.remove(function(err) {

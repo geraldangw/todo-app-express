@@ -1,7 +1,9 @@
 module.exports = function(app) {
 
 var express = require('express'),
-    router = express.Router();
+    router = express.Router(),
+    jwt = require('jsonwebtoken'),
+    jwt_secret = 'onetwothreefourfiveonesixsevenseven';
 
 var User = require('../models/user.server.model');
 var userController = require('../controllers/users.server.controller');
@@ -22,5 +24,7 @@ app.route('/api/users/:user_id')
   .delete(userController.destroy);
 
 app.param('user_id', userController.user_by_id);
+
+app.post('/login', userController.login);
 
 };
