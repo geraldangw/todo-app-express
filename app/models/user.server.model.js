@@ -41,7 +41,7 @@ userSchema.pre('save', function(next) {
   bcrypt.genSalt(5, function(err, salt) {
     if(err) return next (err);
     //create the hash ==> plain password plus salt
-    bcrypt.hash(user.password, sale, function(err, hash) {
+    bcrypt.hash(user.password, salt, function(err, hash) {
       user.password = hash;
       next();
     });

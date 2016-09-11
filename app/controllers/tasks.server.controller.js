@@ -20,7 +20,7 @@ module.exports = {
     res.json(req.task);
   },
   update: function(req, res, next) {
-    Task.findbyIdAndUpdate(req.task.id, req.body, function(err, task) {
+    Task.findByIdAndUpdate(req.task.id, req.body, function(err, task) {
       if(err) {
         return next(err);
       } else {
@@ -40,7 +40,7 @@ module.exports = {
   task_by_id: function (req, res, next, id) {
     Task.findOne({
       _id: id
-    }, 'name, category',
+    },
     function(err, task) {
       if(err) {
         return next(err);

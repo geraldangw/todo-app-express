@@ -16,11 +16,11 @@ app.route('/api/users')
   .get(userController.index)
   .post(userController.create);
 
-app.route('/api/users/:id')
+app.route('/api/users/:user_id')
   .get(userController.show)
   .put(userController.update)
   .delete(userController.destroy);
 
-
+app.param('user_id', userController.user_by_id);
 
 };

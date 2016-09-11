@@ -14,13 +14,14 @@ module.exports = {
     var user = new User(req.body);
     user.save(function(err) {
       if (err) return next (err);
+      res.json(user);
     });
   },
   show: function(req, res) {
     res.json(req.user);
   },
   update: function(req, res, next) {
-    User.findbyIdAndUpdate(req.user.id, req.body, function(err, user) {
+    User.findByIdAndUpdate(req.user.id, req.body, function(err, user) {
       if(err) {
         return next(err);
       } else {
@@ -40,7 +41,7 @@ module.exports = {
   user_by_id: function(req, res, next, id) {
     User.findOne({
       _id: id
-    }, 'firstname, lastname',
+    },
     function(err, user) {
       if (err) {
         return next(err);
