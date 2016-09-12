@@ -49,12 +49,12 @@ module.exports = {
               email: db_user.email
             };
             var expiryObj = {
-              expiresIn: '96h'
+              expiresIn: '3h'
             };
             var jwt_token = jwt.sign(payload, jwt_secret, expiryObj);
 
 
-            return res.status(200).send(jwt_token);
+            return res.status(200).send({token: jwt_token});
           } else {
             return res.status(401).send({ message: 'login failed' });
           }

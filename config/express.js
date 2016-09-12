@@ -42,7 +42,8 @@ module.exports = function() {
     })
     .unless({
       path: [
-      '/login'
+      '/login',
+      '/api/users'
     ]
     })
   );
