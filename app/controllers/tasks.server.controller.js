@@ -1,4 +1,5 @@
 var Task = require('mongoose').model('Task');
+var User = require('mongoose').model('User');
 
 module.exports = {
   index: function(req, res, next) {
@@ -9,12 +10,43 @@ module.exports = {
       res.json(tasks);
     });
 },
-  create: function(req, res, next) {
-    var task = new Task(req.body);
-    task.save(function(err) {
-      if (err) return next (err);
-      res.json(task);
+  create: function(req, res) {
+
+    var task = new Task({
+      task: req.body.task,
+      description: req.body.description,
+      deadline: req.body.deadline,
+      priority: req.body.priority,
+      status: false,
+      deleted: false,
+      user: req.body.user
     });
+
+    task.save(function(err) {
+      if (!err) {
+        console.log(req.body.user);
+        User.findOne( {_id: req.body.user }, function (err, user){
+          if (!err) {
+            console.log(task);
+            console.log(user);
+            user.task.push(task._id);
+            console.log(user);
+            user.save(function(err) {
+              if(!err) {
+                return console.log('saved task to user');
+              } else {
+                console.log(err);
+              }
+            });
+          }
+        });
+        return console.log('created task');
+      } else {
+        return console.log(err);
+      }
+    });
+    return res.send(task);
+
   },
   show: function(req, res) {
     res.json(req.task);

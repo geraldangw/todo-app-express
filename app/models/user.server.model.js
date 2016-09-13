@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 var Schema = mongoose.Schema;
+var task = new Schema();
 
 var userSchema = new mongoose.Schema({
 
@@ -29,31 +30,33 @@ var userSchema = new mongoose.Schema({
       'Password should be at least 6 characters.'
     ]
   },
-  task: [{
-    type: Schema.Types.ObjectId,
+  task:   [{
+    type: String,
     ref: 'Task',
-  }]
+    required: true
+  }],
 });
 
-userSchema.pre('save', function(next) {
-  var user = this;
-  // generate a bcrypt sale
-  bcrypt.genSalt(5, function(err, salt) {
-    if(err) return next (err);
-    //create the hash ==> plain password plus salt
-    bcrypt.hash(user.password, salt, function(err, hash) {
-      user.password = hash;
-      next();
-    });
-  });
-});
 
-userSchema.methods.auth = function(posted_password, callback) {
-  console.log('posted_password is' + posted_password);
-bcrypt.compare(posted_password, this.password, function(err, is_match) {
-  callback(null, is_match);
-});
-};
+// userSchema.pre('save', function(next) {
+//   var user = this;
+//   // generate a bcrypt sale
+//   bcrypt.genSalt(5, function(err, salt) {
+//     if(err) return next (err);
+//     //create the hash ==> plain password plus salt
+//     bcrypt.hash(user.password, salt, function(err, hash) {
+//       user.password = hash;
+//       next();
+//     });
+//   });
+// });
+//
+// userSchema.methods.auth = function(posted_password, callback) {
+//   console.log('posted_password is' + posted_password);
+// bcrypt.compare(posted_password, this.password, function(err, is_match) {
+//   callback(null, is_match);
+// });
+// };
 
 var User = mongoose.model('User', userSchema);
 

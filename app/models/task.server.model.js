@@ -14,22 +14,22 @@ var taskSchema = new Schema ({
     type: Date,
     required: true
   },
-  status: {
+  priority: {
     type: Boolean,
     default: false
   },
-  priority: {
+  user: {
+    type: String,
+    ref: 'User',
+    required: true
+  },
+  status: {
     type: Boolean,
     default: false
   },
   deleted: {
     type: Boolean,
     default: false
-  },
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
   },
   dateentered: {
     type: Date,

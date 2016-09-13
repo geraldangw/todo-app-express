@@ -38,12 +38,12 @@ module.exports = {
     User.findOne({ email: input_user.email }, function (err, db_user) {
       if(err) res.send(err);
 
-      if(db_user) {
-        db_user.auth( input_user.password, function(err, is_match_password) {
+      // if(db_user) {
+      //   db_user.auth( input_user.password, function(err, is_match_password) {
+      //
+      //     if(err) return res.status(500).send(err);
 
-          if(err) return res.status(500).send(err);
-
-          if(is_match_password) {
+          if(db_user.password === input_user.password) {
             var payload = {
               id: db_user.id,
               email: db_user.email
@@ -54,15 +54,15 @@ module.exports = {
             var jwt_token = jwt.sign(payload, jwt_secret, expiryObj);
 
 
-            return res.status(200).send({token: jwt_token});
+            return res.status(200).send({token: jwt_token, id: db_user.id});
           } else {
             return res.status(401).send({ message: 'login failed' });
           }
         });
-      } else {
-        return res.status(401).send({ message: 'user not found in database' });
-      }
-    });
+      // } else {
+      //   return res.status(401).send({ message: 'user not found in database' });
+      // }
+    // });
 
   },
   destroy: function(req, res, next) {
@@ -85,6 +85,8 @@ module.exports = {
         req.user = user;
         next();
       }
-    });
+    })
+    .populate('task');    
 }
+
 };
