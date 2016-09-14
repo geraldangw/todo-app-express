@@ -19,7 +19,7 @@ var taskSchema = new Schema ({
     default: false
   },
   user: {
-    type: String,
+    type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
   },
